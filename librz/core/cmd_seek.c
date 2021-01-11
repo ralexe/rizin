@@ -807,3 +807,83 @@ RZ_IPI int rz_cmd_seek(void *data, const char *input) {
 	}
 	return 0;
 }
+
+RZ_IPI RzCmdStatus rz_seek_base_handler(RzCore *core, int argc, const char **argv) {
+	return RZ_CMD_STATUS_ERROR;
+}
+
+RZ_IPI RzCmdStatus rz_seek_blocksize_backward_handler(RzCore *core, int argc, const char **argv) {
+	return RZ_CMD_STATUS_ERROR;
+}
+
+RZ_IPI RzCmdStatus rz_seek_blocksize_forward_handler(RzCore *core, int argc, const char **argv) {
+	return RZ_CMD_STATUS_ERROR;
+}
+
+RZ_IPI RzCmdStatus rz_seek_handler(RzCore *core, int argc, const char **argv) {
+	return RZ_CMD_STATUS_ERROR;
+}
+
+RZ_IPI RzCmdStatus rz_seek_redo_forward_handler(RzCore *core, int argc, const char **argv) {
+	return RZ_CMD_STATUS_ERROR;
+}
+
+RZ_IPI RzCmdStatus rz_seek_undo_backward_handler(RzCore *core, int argc, const char **argv) {
+	return RZ_CMD_STATUS_ERROR;
+}
+
+RZ_IPI RzCmdStatus rz_seek_undo_reset_handler(RzCore *core, int argc, const char **argv) {
+	return RZ_CMD_STATUS_ERROR;
+}
+
+RZ_IPI RzCmdStatus rz_seek_history_list_handler(RzCore *core, int argc, const char **argv, RzOutputMode mode) {
+	return RZ_CMD_STATUS_ERROR;
+}
+
+RZ_IPI RzCmdStatus rz_seek_search_handler(RzCore *core, int argc, const char **argv) {
+	return RZ_CMD_STATUS_ERROR;
+}
+
+RZ_IPI RzCmdStatus rz_seek_search_hex_handler(RzCore *core, int argc, const char **argv) {
+	return RZ_CMD_STATUS_ERROR;
+}
+
+RZ_IPI RzCmdStatus rz_seek_asz_handler(RzCore *core, int argc, const char **argv) {
+	return RZ_CMD_STATUS_ERROR;
+}
+
+RZ_IPI RzCmdStatus rz_seek_basicblock_handler(RzCore *core, int argc, const char **argv) {
+	return RZ_CMD_STATUS_ERROR;
+}
+
+RZ_IPI RzCmdStatus rz_seek_function_handler(RzCore *core, int argc, const char **argv) {
+	return RZ_CMD_STATUS_ERROR;
+}
+
+RZ_IPI RzCmdStatus rz_seek_function_current_handler(RzCore *core, int argc, const char **argv) {
+	return RZ_CMD_STATUS_ERROR;
+}
+
+RZ_IPI RzCmdStatus rz_seek_begin_handler(RzCore *core, int argc, const char **argv) {
+	return RZ_CMD_STATUS_ERROR;
+}
+
+RZ_IPI RzCmdStatus rz_seek_end_handler(RzCore *core, int argc, const char **argv) {
+	return RZ_CMD_STATUS_ERROR;
+}
+
+RZ_IPI RzCmdStatus rz_seek_next_handler(RzCore *core, int argc, const char **argv) {
+	return RZ_CMD_STATUS_ERROR;
+}
+
+RZ_IPI RzCmdStatus rz_seek_prev_handler(RzCore *core, int argc, const char **argv) {
+	return RZ_CMD_STATUS_ERROR;
+}
+
+RZ_IPI RzCmdStatus rz_seek_opcode_handler(RzCore *core, int argc, const char **argv) {
+	return RZ_CMD_STATUS_ERROR;
+}
+
+RZ_IPI RzCmdStatus rz_seek_register_handler(RzCore *core, int argc, const char **argv) {
+	return RZ_CMD_STATUS_ERROR;
+}

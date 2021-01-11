@@ -6491,6 +6491,10 @@ static void cmd_descriptor_init(RzCore *core) {
 	}
 }
 
+RZ_IPI RzCmdStatus rz_sleep_handler(RzCore *core, int argc, const char **argv) {
+	return RZ_CMD_STATUS_ERROR;
+}
+
 static int core_cmd0_wrapper(void *core, const char *cmd) {
 	return rz_core_cmd0 ((RzCore *)core, cmd);
 }

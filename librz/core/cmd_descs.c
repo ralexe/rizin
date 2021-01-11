@@ -59,6 +59,18 @@ static const RzCmdDescArg ls_args[2];
 static const RzCmdDescArg project_save_args[2];
 static const RzCmdDescArg project_open_args[2];
 static const RzCmdDescArg project_open_no_bin_io_args[2];
+static const RzCmdDescArg seek_args[2];
+static const RzCmdDescArg seek_base_args[2];
+static const RzCmdDescArg seek_undo_backward_args[2];
+static const RzCmdDescArg seek_redo_forward_args[2];
+static const RzCmdDescArg seek_blocksize_backward_args[2];
+static const RzCmdDescArg seek_blocksize_forward_args[2];
+static const RzCmdDescArg seek_search_args[2];
+static const RzCmdDescArg seek_search_hex_args[2];
+static const RzCmdDescArg seek_function_args[2];
+static const RzCmdDescArg seek_opcode_args[2];
+static const RzCmdDescArg seek_register_args[2];
+static const RzCmdDescArg sleep_args[2];
 static const RzCmdDescArg uniq_args[2];
 static const RzCmdDescArg uname_args[2];
 static const RzCmdDescArg write_args[2];
@@ -226,7 +238,7 @@ static const RzCmdDescDetail pointer_details[] = {
 };
 
 static const RzCmdDescArg pointer_args[] = {
-	{ .name = "addr", .type = RZ_CMD_ARG_TYPE_NUM, },
+	{ .name = "addr", .type = RZ_CMD_ARG_TYPE_RZNUM, },
 	{ .name = "value", .type = RZ_CMD_ARG_TYPE_NUM, .optional = true, },
 	{ 0 },
 };
@@ -703,8 +715,187 @@ static const RzCmdDescHelp cmd_resize_help = {
 	.summary = "Resize file",
 };
 
-static const RzCmdDescHelp cmd_seek_help = {
-	.summary = "Seek to address",
+static const RzCmdDescHelp s_help = {
+	.summary = "Seek commands",
+};
+static const RzCmdDescArg seek_args[] = {
+	{ .name = "addr", .type = RZ_CMD_ARG_TYPE_RZNUM, .optional = true, },
+	{ 0 },
+};
+static const RzCmdDescHelp seek_help = {
+	.summary = "Print current address / Seek to address",
+	.args = seek_args,
+};
+
+static const RzCmdDescArg seek_base_args[] = {
+	{ .name = "hex_offset", .type = RZ_CMD_ARG_TYPE_NUM, },
+	{ 0 },
+};
+static const RzCmdDescHelp seek_base_help = {
+	.summary = "Seek honoring a base from core->offset",
+	.args = seek_base_args,
+};
+
+static const RzCmdDescArg seek_undo_backward_args[] = {
+	{ .name = "n", .type = RZ_CMD_ARG_TYPE_NUM, .optional = true, },
+	{ 0 },
+};
+static const RzCmdDescHelp seek_undo_backward_help = {
+	.summary = "Undo seek / Seek n bytes backward",
+	.args = seek_undo_backward_args,
+};
+
+static const RzCmdDescArg seek_redo_forward_args[] = {
+	{ .name = "n", .type = RZ_CMD_ARG_TYPE_NUM, .optional = true, },
+	{ 0 },
+};
+static const RzCmdDescHelp seek_redo_forward_help = {
+	.summary = "Redo seek / Seek n bytes forward",
+	.args = seek_redo_forward_args,
+};
+
+static const RzCmdDescArg seek_undo_reset_args[] = {
+	{ 0 },
+};
+static const RzCmdDescHelp seek_undo_reset_help = {
+	.summary = "Reset undo seek history",
+	.args = seek_undo_reset_args,
+};
+
+static const RzCmdDescArg seek_blocksize_backward_args[] = {
+	{ .name = "n", .type = RZ_CMD_ARG_TYPE_NUM, .optional = true, },
+	{ 0 },
+};
+static const RzCmdDescHelp seek_blocksize_backward_help = {
+	.summary = "Seek blocksize bytes backward (/=n)",
+	.args = seek_blocksize_backward_args,
+};
+
+static const RzCmdDescArg seek_blocksize_forward_args[] = {
+	{ .name = "n", .type = RZ_CMD_ARG_TYPE_NUM, .optional = true, },
+	{ 0 },
+};
+static const RzCmdDescHelp seek_blocksize_forward_help = {
+	.summary = "Seek blocksize bytes forward (/=n)",
+	.args = seek_blocksize_forward_args,
+};
+
+static const RzCmdDescArg seek_history_list_args[] = {
+	{ 0 },
+};
+static const RzCmdDescHelp seek_history_list_help = {
+	.summary = "List undo seek history",
+	.args = seek_history_list_args,
+};
+
+static const RzCmdDescArg seek_search_args[] = {
+	{ .name = "string", .type = RZ_CMD_ARG_TYPE_STRING, },
+	{ 0 },
+};
+static const RzCmdDescHelp seek_search_help = {
+	.summary = "Search for next occurrence of <string>",
+	.args = seek_search_args,
+};
+
+static const RzCmdDescArg seek_search_hex_args[] = {
+	{ .name = "hex_string", .type = RZ_CMD_ARG_TYPE_STRING, },
+	{ 0 },
+};
+static const RzCmdDescHelp seek_search_hex_help = {
+	.summary = "Search for next occurrence of <hex_string>",
+	.args = seek_search_hex_args,
+};
+
+static const RzCmdDescArg seek_asz_args[] = {
+	{ 0 },
+};
+static const RzCmdDescHelp seek_asz_help = {
+	.summary = "Seek asz (or bsize) aligned to addr",
+	.args = seek_asz_args,
+};
+
+static const RzCmdDescArg seek_basicblock_args[] = {
+	{ 0 },
+};
+static const RzCmdDescHelp seek_basicblock_help = {
+	.summary = "Seek aligned to bb start",
+	.args = seek_basicblock_args,
+};
+
+static const RzCmdDescArg seek_function_args[] = {
+	{ .name = "fcn", .type = RZ_CMD_ARG_TYPE_FCN, .optional = true, },
+	{ 0 },
+};
+static const RzCmdDescHelp seek_function_help = {
+	.summary = "Seek to next function / Seek to specific function",
+	.args = seek_function_args,
+};
+
+static const RzCmdDescArg seek_function_current_args[] = {
+	{ 0 },
+};
+static const RzCmdDescHelp seek_function_current_help = {
+	.summary = "Seek to the beginning of current function",
+	.args = seek_function_current_args,
+};
+
+static const RzCmdDescArg seek_begin_args[] = {
+	{ 0 },
+};
+static const RzCmdDescHelp seek_begin_help = {
+	.summary = "Seek to begin of section/file",
+	.args = seek_begin_args,
+};
+
+static const RzCmdDescArg seek_end_args[] = {
+	{ 0 },
+};
+static const RzCmdDescHelp seek_end_help = {
+	.summary = "Seek to end of section/file",
+	.args = seek_end_args,
+};
+
+static const RzCmdDescArg seek_next_args[] = {
+	{ 0 },
+};
+static const RzCmdDescHelp seek_next_help = {
+	.summary = "Seek to next location",
+	.args = seek_next_args,
+};
+
+static const RzCmdDescArg seek_prev_args[] = {
+	{ 0 },
+};
+static const RzCmdDescHelp seek_prev_help = {
+	.summary = "Seek to prev location",
+	.args = seek_prev_args,
+};
+
+static const RzCmdDescArg seek_opcode_args[] = {
+	{ .name = "n", .type = RZ_CMD_ARG_TYPE_NUM, .optional = true, },
+	{ 0 },
+};
+static const RzCmdDescHelp seek_opcode_help = {
+	.summary = "Seek to <n> next opcodes",
+	.args = seek_opcode_args,
+};
+
+static const RzCmdDescArg seek_register_args[] = {
+	{ .name = "reg", .type = RZ_CMD_ARG_TYPE_STRING, },
+	{ 0 },
+};
+static const RzCmdDescHelp seek_register_help = {
+	.summary = "Seek to register",
+	.args = seek_register_args,
+};
+
+static const RzCmdDescArg sleep_args[] = {
+	{ .name = "seconds", .type = RZ_CMD_ARG_TYPE_NUM, },
+	{ 0 },
+};
+static const RzCmdDescHelp sleep_help = {
+	.summary = "Sleep for the specified amount of seconds",
+	.args = sleep_args,
 };
 
 static const RzCmdDescHelp cmd_type_help = {
@@ -1714,8 +1905,47 @@ RZ_IPI void newshell_cmddescs_init(RzCore *core) {
 	rz_warn_if_fail (cmd_quit_cd);
 	RzCmdDesc *cmd_resize_cd = rz_cmd_desc_oldinput_new (core->rcmd, root_cd, "r", rz_cmd_resize, &cmd_resize_help);
 	rz_warn_if_fail (cmd_resize_cd);
-	RzCmdDesc *cmd_seek_cd = rz_cmd_desc_oldinput_new (core->rcmd, root_cd, "s", rz_cmd_seek, &cmd_seek_help);
-	rz_warn_if_fail (cmd_seek_cd);
+	RzCmdDesc *s_cd = rz_cmd_desc_group_new (core->rcmd, root_cd, "s", rz_seek_handler, &seek_help, &s_help);
+	rz_warn_if_fail (s_cd);	RzCmdDesc *seek_base_cd = rz_cmd_desc_argv_new (core->rcmd, s_cd, "s.", rz_seek_base_handler, &seek_base_help);
+	rz_warn_if_fail (seek_base_cd);
+	RzCmdDesc *seek_undo_backward_cd = rz_cmd_desc_argv_new (core->rcmd, s_cd, "s-", rz_seek_undo_backward_handler, &seek_undo_backward_help);
+	rz_warn_if_fail (seek_undo_backward_cd);
+	RzCmdDesc *seek_redo_forward_cd = rz_cmd_desc_argv_new (core->rcmd, s_cd, "s+", rz_seek_redo_forward_handler, &seek_redo_forward_help);
+	rz_warn_if_fail (seek_redo_forward_cd);
+	RzCmdDesc *seek_undo_reset_cd = rz_cmd_desc_argv_new (core->rcmd, s_cd, "s-*", rz_seek_undo_reset_handler, &seek_undo_reset_help);
+	rz_warn_if_fail (seek_undo_reset_cd);
+	RzCmdDesc *seek_blocksize_backward_cd = rz_cmd_desc_argv_new (core->rcmd, s_cd, "s--", rz_seek_blocksize_backward_handler, &seek_blocksize_backward_help);
+	rz_warn_if_fail (seek_blocksize_backward_cd);
+	RzCmdDesc *seek_blocksize_forward_cd = rz_cmd_desc_argv_new (core->rcmd, s_cd, "s++", rz_seek_blocksize_forward_handler, &seek_blocksize_forward_help);
+	rz_warn_if_fail (seek_blocksize_forward_cd);
+	RzCmdDesc *seek_history_list_cd = rz_cmd_desc_argv_modes_new (core->rcmd, s_cd, "s!", RZ_OUTPUT_MODE_STANDARD | RZ_OUTPUT_MODE_JSON | RZ_OUTPUT_MODE_RIZIN, rz_seek_history_list_handler, &seek_history_list_help);
+	rz_warn_if_fail (seek_history_list_cd);
+	RzCmdDesc *seek_search_cd = rz_cmd_desc_argv_new (core->rcmd, s_cd, "s/", rz_seek_search_handler, &seek_search_help);
+	rz_warn_if_fail (seek_search_cd);
+	RzCmdDesc *seek_search_hex_cd = rz_cmd_desc_argv_new (core->rcmd, s_cd, "s/x", rz_seek_search_hex_handler, &seek_search_hex_help);
+	rz_warn_if_fail (seek_search_hex_cd);
+	RzCmdDesc *seek_asz_cd = rz_cmd_desc_argv_new (core->rcmd, s_cd, "sa", rz_seek_asz_handler, &seek_asz_help);
+	rz_warn_if_fail (seek_asz_cd);
+	RzCmdDesc *seek_basicblock_cd = rz_cmd_desc_argv_new (core->rcmd, s_cd, "sb", rz_seek_basicblock_handler, &seek_basicblock_help);
+	rz_warn_if_fail (seek_basicblock_cd);
+	RzCmdDesc *seek_function_cd = rz_cmd_desc_argv_new (core->rcmd, s_cd, "sf", rz_seek_function_handler, &seek_function_help);
+	rz_warn_if_fail (seek_function_cd);
+	RzCmdDesc *seek_function_current_cd = rz_cmd_desc_argv_new (core->rcmd, s_cd, "sf.", rz_seek_function_current_handler, &seek_function_current_help);
+	rz_warn_if_fail (seek_function_current_cd);
+	RzCmdDesc *seek_begin_cd = rz_cmd_desc_argv_new (core->rcmd, s_cd, "sg", rz_seek_begin_handler, &seek_begin_help);
+	rz_warn_if_fail (seek_begin_cd);
+	RzCmdDesc *seek_end_cd = rz_cmd_desc_argv_new (core->rcmd, s_cd, "sG", rz_seek_end_handler, &seek_end_help);
+	rz_warn_if_fail (seek_end_cd);
+	RzCmdDesc *seek_next_cd = rz_cmd_desc_argv_new (core->rcmd, s_cd, "sn", rz_seek_next_handler, &seek_next_help);
+	rz_warn_if_fail (seek_next_cd);
+	RzCmdDesc *seek_prev_cd = rz_cmd_desc_argv_new (core->rcmd, s_cd, "sp", rz_seek_prev_handler, &seek_prev_help);
+	rz_warn_if_fail (seek_prev_cd);
+	RzCmdDesc *seek_opcode_cd = rz_cmd_desc_argv_new (core->rcmd, s_cd, "so", rz_seek_opcode_handler, &seek_opcode_help);
+	rz_warn_if_fail (seek_opcode_cd);
+	RzCmdDesc *seek_register_cd = rz_cmd_desc_argv_new (core->rcmd, s_cd, "sr", rz_seek_register_handler, &seek_register_help);
+	rz_warn_if_fail (seek_register_cd);
+	RzCmdDesc *sleep_cd = rz_cmd_desc_argv_new (core->rcmd, s_cd, "sleep", rz_sleep_handler, &sleep_help);
+	rz_warn_if_fail (sleep_cd);
 	RzCmdDesc *cmd_type_cd = rz_cmd_desc_oldinput_new (core->rcmd, root_cd, "t", rz_cmd_type, &cmd_type_help);
 	rz_warn_if_fail (cmd_type_cd);
 	RzCmdDesc *uniq_cd = rz_cmd_desc_argv_new (core->rcmd, root_cd, "uniq", rz_uniq_handler, &uniq_help);
